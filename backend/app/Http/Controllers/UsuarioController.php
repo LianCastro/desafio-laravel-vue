@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
+use App\Models\Endereco;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
@@ -34,13 +35,18 @@ class UsuarioController extends Controller
             'email'     => 'required|email|unique:usuarios',
             'cpf'       => 'required|string|max:14|unique:usuarios',
             'perfil_id' => 'required|exists:perfis,id',
-            'enderecos' => 'array'
+            'enderecos' => 'required|array'
         ]);
 
         $usuario = Usuario::create($request->only(['nome', 'email', 'cpf', 'perfil_id']));
 
         if ($request->filled('enderecos')) {
-            $usuario->enderecos()->sync($request->enderecos);
+            $ids = [];
+            foreach ($request->enderecos as $enderecoData) {
+                $endereco = Endereco::create($enderecoData);
+                $ids[] = $endereco->id;
+            }
+            $usuario->enderecos()->sync($ids);
         }
 
         return $usuario->load(['perfil', 'enderecos']);
@@ -63,8 +69,24 @@ class UsuarioController extends Controller
 
         $usuario->update($request->only(['nome', 'email', 'cpf', 'perfil_id']));
 
+        // Atualizar / criar endereços
         if ($request->filled('enderecos')) {
-            $usuario->enderecos()->sync($request->enderecos);
+            $ids = [];
+            foreach ($request->enderecos as $enderecoData) {
+                if (isset($enderecoData['id'])) {
+                    // Atualiza endereço existente
+                    $endereco = Endereco::find($enderecoData['id']);
+                    if ($endereco) {
+                        $endereco->update($enderecoData);
+                        $ids[] = $endereco->id;
+                    }
+                } else {
+                    // Cria novo endereço
+                    $endereco = Endereco::create($enderecoData);
+                    $ids[] = $endereco->id;
+                }
+            }
+            $usuario->enderecos()->sync($ids);
         }
 
         return $usuario->load(['perfil', 'enderecos']);

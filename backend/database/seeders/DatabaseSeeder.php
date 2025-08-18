@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+// use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Perfil;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,8 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar 3 perfis (um de cada tipo)
-        collect(['Administrador', 'Usuário', 'Gerente'])
-            ->each(fn ($nome) => Perfil::create(['nome' => $nome]));
+        DB::table('perfis')->insert([
+            ['nome' => 'Administrador'],
+            ['nome' => 'Usuário'],
+            ['nome' => 'Gerente'],
+        ]);
     }
 }

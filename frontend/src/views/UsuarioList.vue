@@ -1,16 +1,26 @@
 <template>
-  <div>
-    <h1>Usuários</h1>
+  <div class="container mt-4">
+    <h1 class="mb-4">Usuários</h1>
 
     <!-- Filtros -->
-    <input v-model="filtro.nome" placeholder="Filtrar por nome" />
-    <input v-model="filtro.cpf" placeholder="Filtrar por CPF" />
-    <button @click="carregarUsuarios">Filtrar</button>
-    <router-link to="/usuarios/novo">Novo Usuário</router-link>
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <input v-model="filtro.nome" class="form-control" placeholder="Filtrar por nome" />
+      </div>
+      <div class="col-md-3">
+        <input v-model="filtro.cpf" class="form-control" placeholder="Filtrar por CPF" />
+      </div>
+      <div class="col-md-3">
+        <button @click="carregarUsuarios" class="btn btn-primary w-100">Filtrar</button>
+      </div>
+      <div class="col-md-3 text-end">
+        <router-link to="/usuarios/novo" class="btn btn-success">Novo Usuário</router-link>
+      </div>
+    </div>
 
     <!-- Tabela -->
-    <table border="1">
-      <thead>
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
         <tr>
           <th>Nome</th>
           <th>Email</th>
@@ -26,14 +36,15 @@
           <td>{{ u.cpf }}</td>
           <td>{{ u.perfil?.nome }}</td>
           <td>
-            <router-link :to="`/usuarios/${u.id}`">Editar</router-link>
-            <button @click="excluirUsuario(u.id)">Excluir</button>
+            <router-link :to="`/usuarios/${u.id}`" class="btn btn-sm btn-warning me-2">Editar</router-link>
+            <button @click="excluirUsuario(u.id)" class="btn btn-sm btn-danger">Excluir</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
 
 <script>
 import api from '../services/api';
