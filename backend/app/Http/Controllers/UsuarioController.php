@@ -22,7 +22,10 @@ class UsuarioController extends Controller
         }
 
         if ($request->filled('data_inicio') && $request->filled('data_fim')) {
-            $query->whereBetween('created_at', [$request->data_inicio, $request->data_fim]);
+            $query->whereBetween('created_at', [
+                $request->data_inicio . " 00:00:00",
+                $request->data_fim . " 23:59:59"
+            ]);
         }
 
         return $query->get();

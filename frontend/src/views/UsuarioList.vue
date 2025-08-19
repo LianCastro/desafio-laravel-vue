@@ -8,12 +8,20 @@
         <input v-model="filtro.nome" class="form-control" placeholder="Filtrar por nome" />
       </div>
       <div class="col-md-3">
-        <input v-model="filtro.cpf" class="form-control" placeholder="Filtrar por CPF" />
+        <input v-model="filtro.cpf" class="form-control" v-mask="'###.###.###-##'" placeholder="Filtrar por CPF" />
       </div>
       <div class="col-md-3">
+        <input v-model="filtro.data_inicio" type="date" class="form-control" />
+      </div>
+      <div class="col-md-3">
+        <input v-model="filtro.data_fim" type="date" class="form-control" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-1">
         <button @click="carregarUsuarios" class="btn btn-primary w-100">Filtrar</button>
       </div>
-      <div class="col-md-3 text-end">
+      <div class="col-md-2 text-end">
         <router-link to="/usuarios/novo" class="btn btn-success">Novo Usuário</router-link>
       </div>
     </div>
